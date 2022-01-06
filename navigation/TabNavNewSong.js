@@ -4,12 +4,12 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 import SearchRimeScreen from "../screens/SearchRimeScreen";
 import RecordScreen from "../screens/RecordScreen";
-import EditScreen from "../screens/EditScreen";
+import NewSongScreen from "../screens/NewSongScreen";
 import Colors from "../constants/colors";
 
 const Tab = createBottomTabNavigator();
 
-function TabNav() {
+function TabNavNewSong() {
 	return (
 		<Tab.Navigator
 			screenOptions={({ route }) => ({
@@ -22,7 +22,7 @@ function TabNav() {
 				tabBarIcon: ({ focused, color, size }) => {
 					let iconName;
 
-					if (route.name === "Edit") {
+					if (route.name === "Song") {
 						iconName = focused ? "pencil" : "pencil";
 					} else if (route.name === "Search") {
 						iconName = focused ? "search" : "search-sharp";
@@ -34,11 +34,11 @@ function TabNav() {
 				},
 			})}
 		>
-			<Tab.Screen name="Edit" component={EditScreen} />
+			<Tab.Screen name="Song" component={NewSongScreen} />
 			<Tab.Screen name="Search" component={SearchRimeScreen} />
 			<Tab.Screen name="Record" component={RecordScreen} />
 		</Tab.Navigator>
 	);
 }
 
-export default TabNav;
+export default TabNavNewSong;

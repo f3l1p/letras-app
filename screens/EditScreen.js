@@ -5,20 +5,40 @@ import {
 	StyleSheet,
 	Button,
 	TouchableOpacity,
+	Alert,
 } from "react-native";
 import { useDispatch } from "react-redux";
-import { updateLyricAction } from "../store/reducers";
+import { updateLyricAction, deletelyricAction } from "../store/reducers";
+import { useNavigation } from "@react-navigation/native";
 
 import Colors from "../constants/colors";
 
 const EditScreen = (props) => {
-	const [lyric, onChangeText] = useState();
 	const [title, onChangeTitle] = useState();
+	const [lyric, onChangeText] = useState();
 
+	const navigation = useNavigation();
 	const dispatch = useDispatch();
 
-	const updateLyricsHandler = (title, lyric) => {
-		dispatch(updateLyricAction(title, lyric));
+	const songId = props.route.params.id;
+
+	// Aun no sirve
+	const updateLyricsHandler = (id, title, lyric) => {
+		dispatch(updateLyricAction(id, title, lyric));
+		navigation.navigate("Home");
+	};
+	// Aun no sirve
+	const deleteLyricHandler = (id) => {
+		dispatch(deletelyricAction(id));
+		navigation.navigate("Home");
+	};
+
+	const alertHandler = () => {
+		Alert.alert(
+			"Tenemos un problema",
+			"No te preocupes, un grupo de monos esta trabajando en esto. Pronto estara solucionado!",
+			[{ text: "OK", onPress: () => console.log("OK Pressed") }]
+		);
 	};
 
 	return (
@@ -26,19 +46,35 @@ const EditScreen = (props) => {
 			<TextInput style={styles.inputTitle} onChangeText={onChangeTitle}>
 				{props.route.params.title}
 			</TextInput>
-			<TextInput multiline={true} style={styles.inputText}>
+			<TextInput
+				multiline={true}
+				style={styles.inputText}
+				onChangeText={onChangeText}
+			>
 				{props.route.params.lyric}
 			</TextInput>
-			<TouchableOpacity style={styles.buttonContainer}>
-				<Button
-					onPress={() => {
-						updateLyricsHandler(title, lyric);
-						console.log("hola");
-					}}
-					title="Save"
-					color={Colors.background}
-				/>
-			</TouchableOpacity>
+			<View style={styles.buttonsGroup}>
+				<TouchableOpacity style={styles.buttonContainer}>
+					<Button
+						onPress={() => {
+							alertHandler();
+							console.log("update action");
+						}}
+						title="Save"
+						color={Colors.background}
+					/>
+				</TouchableOpacity>
+				<TouchableOpacity style={styles.buttonContainer}>
+					<Button
+						onPress={() => {
+							alertHandler();
+							console.log("delete action");
+						}}
+						title="Delete"
+						color={Colors.details}
+					/>
+				</TouchableOpacity>
+			</View>
 		</View>
 	);
 };
@@ -54,11 +90,20 @@ const styles = StyleSheet.create({
 		padding: 10,
 		fontSize: 20,
 		fontWeight: "bold",
+		fontFamily: "claireBold",
 	},
 
 	inputText: {
 		padding: 10,
 		fontSize: 16,
+		fontFamily: "claireRegular",
+	},
+
+	buttonsGroup: {
+		flex: 1,
+		flexDirection: "row",
+		justifyContent: "space-around",
+		alignContent: "space-around",
 	},
 
 	buttonContainer: {

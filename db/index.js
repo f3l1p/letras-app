@@ -8,7 +8,7 @@ export const init = () => {
 		db.transaction((tx) => {
 			tx.executeSql(
 				`CREATE TABLE IF NOT EXISTS lyrics (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT ,
+					id TEXT NOT NULL,
                     title TEXT NOT NULL,
                     lyric TEXT NOT NULL
                     )`,
@@ -25,13 +25,13 @@ export const init = () => {
 	return promise;
 };
 
-export const insertLyric = (title, lyric) => {
+export const insertLyricDb = (id, title, lyric) => {
 	return new Promise((resolve, reject) => {
 		db.transaction((tx) => {
 			tx.executeSql(
-				`INSERT INTO lyrics ( title, lyric)
-				VALUES (?,?)`,
-				[title, lyric],
+				`INSERT INTO lyrics (id, title, lyric)
+				VALUES (?,?,?)`,
+				[id, title, lyric],
 				(_, result) => resolve(result),
 				(_, err) => reject(err)
 			);
@@ -39,7 +39,7 @@ export const insertLyric = (title, lyric) => {
 	});
 };
 
-export const fetchLyrics = (id, title, lyric) => {
+export const fetchLyricsDb = () => {
 	return new Promise((resolve, reject) => {
 		db.transaction((tx) => {
 			tx.executeSql(
@@ -52,11 +52,11 @@ export const fetchLyrics = (id, title, lyric) => {
 	});
 };
 
-export const updateLyric = (title, lyric) => {
+export const updateLyricDb = (id, title, lyric) => {
 	return new Promise((resolve, reject) => {
 		db.transaction((tx) => {
 			tx.executeSql(
-				"UPDATE lyrics SET title=? lyric=? WHERE id=?",
+				`UPDATE lyrics SET title=?, lyric=? WHERE id=?`,
 				[title, lyric, id],
 				(_, result) => resolve(result),
 				(_, err) => reject(err)
@@ -64,5 +64,18 @@ export const updateLyric = (title, lyric) => {
 		});
 	});
 };
-//`UPDATE lyrics SET title=? lyric=? WHERE id=? `,
-//`DELETE FROM lyrics`
+
+export const deleteLyricDb = (id) => {
+	return new Promise((resolve, reject) => {
+		db.transaction((tx) => {
+			tx.executeSql(
+				`DELETE FROM lyrics WHERE id=?`,
+				[id],
+				(_, result) => resolve(result),
+				(_, err) => reject(err)
+			);
+		});
+	});
+};
+
+//id INTEGER PRIMARY KEY AUTOINCREMENT ,

@@ -11,10 +11,11 @@ import SongItem from "../components/SongItem";
 import { useSelector, useDispatch } from "react-redux";
 import { loadLyrics } from "../store/reducers";
 
-const SongsList = (props) => {
+const SongsList = () => {
 	const navigation = useNavigation();
 
 	const LYRICS = useSelector((state) => state.lyrics);
+
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -35,7 +36,7 @@ const SongsList = (props) => {
 							onPress={() =>
 								navigation.navigate("Detail", {
 									screen: "Edit",
-									params: { title: item.title, lyric: item.lyric },
+									params: { id: item.id, title: item.title, lyric: item.lyric },
 								})
 							}
 						>

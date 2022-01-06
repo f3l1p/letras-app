@@ -10,44 +10,43 @@ import {
 } from "react-native";
 import Colors from "../constants/colors";
 
+import wordsDB from "../db/wordsDB";
+
 const SearchRimeScreen = () => {
 	const [search, setSearch] = useState("");
-	const [filteredData, setFilteredData] = useState([]);
+	const [filteredData, setFilteredData] = useState();
 
-	const searchSeparation = search.split("");
+	let searchLower = search.toLocaleLowerCase();
+
+	const searchSeparation = searchLower.split("");
 
 	let counter = 0;
 	for (const obj of searchSeparation) {
 		if (obj) counter++;
 	}
 
-	const allWords = [
-		"hola",
-		"ola",
-		"pola",
-		"marimañola",
-		"tola",
-		"cancion",
-		"oracion",
-		"negacion",
-	];
-
 	const searchRimesHandler = () => {
-		const filteredData = allWords.filter((w) => w.slice(-+counter) === search);
-		setFilteredData(filteredData);
+		const filterData = wordsDB.filter(
+			(w) => w.word.slice(-+counter) === searchLower
+		);
+		setFilteredData(filterData);
 	};
 
 	return (
 		<View style={styles.screen}>
-			{filteredData === [] ? (
-				<Text>
-					Busca tu rima escribiendo las ultimas letras que quieres que rimen
-				</Text>
+			{!filteredData ? (
+				<View style={styles.textContainer}>
+					<Text>
+						Busca tu rima escribiendo las ultimas letras que quieres que rimen
+					</Text>
+				</View>
 			) : (
-				<View>
+				<View style={styles.listContainer}>
 					<FlatList
 						data={filteredData}
-						renderItem={({ item }) => <Text style={styles.rimes}>{item}</Text>}
+						renderItem={({ item }) => (
+							<Text style={styles.rimes}>{item.word}</Text>
+						)}
 					/>
 				</View>
 			)}
@@ -72,11 +71,20 @@ const styles = StyleSheet.create({
 		margin: 0,
 	},
 
-	inputContainer: {
+	textContainer: {
 		flex: 1,
+		alignItems: "center",
+		justifyContent: "center",
+	},
+
+	listContainer: {
+		flex: 1,
+	},
+
+	inputContainer: {
 		flexDirection: "row",
 		justifyContent: "space-between",
-		maxHeight: 60,
+		maxHeight: 80,
 		padding: 10,
 		backgroundColor: Colors.background,
 	},

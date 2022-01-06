@@ -13,7 +13,7 @@ export default function App() {
 	const [loadDB, setLoadDB] = useState(false);
 	const [loaded] = useFonts({
 		claireRegular: require("./assets/fonts/ClaireHandRegular.otf"),
-		ClaireBold: require("./assets/fonts/ClaireHandBold.otf"),
+		claireBold: require("./assets/fonts/ClaireHandBold.otf"),
 	});
 
 	useEffect(() => {

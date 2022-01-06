@@ -5,7 +5,7 @@ import Colors from "../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 
 import SongsList from "../screens/SongsList";
-import NewSongScreen from "../screens/NewSongScreen";
+import TabNavNewSong from "./TabNavNewSong";
 import TabNav from "../navigation/TabNavigator";
 
 const Stack = createNativeStackNavigator();
@@ -41,7 +41,7 @@ const SongsNavigator = () => {
 			/>
 			<Stack.Screen
 				name="NewSong"
-				component={NewSongScreen}
+				component={TabNavNewSong}
 				options={() => ({
 					title: "New Song",
 				})}

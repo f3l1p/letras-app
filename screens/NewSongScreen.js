@@ -19,26 +19,30 @@ const NewSongScreen = () => {
 	const dispatch = useDispatch();
 
 	const addLyricHandler = (title, lyric) => {
-		dispatch(addLyric(title, lyric));
+		const dateId = new Date().getTime();
+		dispatch(addLyric(dateId, title, lyric));
 	};
 
 	return (
-		<View style={styles.container}>
-			<TextInput
-				style={styles.inputTitle}
-				onChangeText={onChangeTitle}
-				value={title}
-				placeholder="Title..."
-			/>
-			<TextInput
-				style={styles.inputText}
-				onChangeText={onChangeLyric}
-				value={lyric}
-				multiline={true}
-				placeholder="Lyrics..."
-			/>
+		<View style={styles.screen}>
+			<View style={styles.containerText}>
+				<TextInput
+					style={styles.inputTitle}
+					onChangeText={onChangeTitle}
+					value={title}
+					placeholder="Title..."
+				/>
+				<TextInput
+					style={styles.inputText}
+					onChangeText={onChangeLyric}
+					value={lyric}
+					multiline={true}
+					placeholder="Lyrics..."
+				/>
+			</View>
+
 			<View style={styles.buttonContainer}>
-				<TouchableOpacity>
+				<TouchableOpacity style={styles.buttonWrap}>
 					<Button
 						onPress={() => {
 							addLyricHandler(title, lyric);
@@ -54,28 +58,39 @@ const NewSongScreen = () => {
 };
 
 const styles = StyleSheet.create({
-	container: {
+	screen: {
 		flex: 1,
+		flexDirection: "column",
 		marginTop: 10,
 		alignItems: "center",
+	},
+
+	containerText: {
+		flex: 1,
 	},
 
 	inputTitle: {
 		padding: 10,
 		fontSize: 20,
 		fontWeight: "bold",
+		fontFamily: "claireBold",
 	},
 
 	inputText: {
 		padding: 10,
 		fontSize: 16,
+		fontFamily: "claireRegular",
 	},
 
 	buttonContainer: {
 		flex: 1,
-		flexDirection: "column",
+		flexDirection: "row",
+		maxHeight: 50,
+	},
+
+	buttonWrap: {
+		flex: 1,
 		justifyContent: "flex-end",
-		maxWidth: "80%",
 	},
 });
 
