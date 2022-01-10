@@ -19,7 +19,7 @@ const NewSongScreen = () => {
 	const dispatch = useDispatch();
 
 	const addLyricHandler = (title, lyric) => {
-		const dateId = new Date().getTime();
+		const dateId = new Date().getTime().toString();
 		dispatch(addLyric(dateId, title, lyric));
 	};
 

@@ -58,7 +58,10 @@ export const updateLyricDb = (id, title, lyric) => {
 			tx.executeSql(
 				`UPDATE lyrics SET title=?, lyric=? WHERE id=?`,
 				[title, lyric, id],
-				(_, result) => resolve(result),
+				(_, result) => {
+					console.log(result);
+					resolve(result);
+				},
 				(_, err) => reject(err)
 			);
 		});
@@ -77,5 +80,3 @@ export const deleteLyricDb = (id) => {
 		});
 	});
 };
-
-//id INTEGER PRIMARY KEY AUTOINCREMENT ,

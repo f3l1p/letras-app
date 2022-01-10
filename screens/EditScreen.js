@@ -14,10 +14,12 @@ import { useNavigation } from "@react-navigation/native";
 import Colors from "../constants/colors";
 
 const EditScreen = (props) => {
-	const [title, onChangeTitle] = useState();
-	const [lyric, onChangeText] = useState();
+	const { title: prevTitle, lyrics: prevLyrics } = props.route.params;
 
+	const [title, onChangeTitle] = useState(prevTitle);
+	const [lyric, onChangeText] = useState(prevTitle);
 	const navigation = useNavigation();
+
 	const dispatch = useDispatch();
 
 	const songId = props.route.params.id;
@@ -57,7 +59,7 @@ const EditScreen = (props) => {
 				<TouchableOpacity style={styles.buttonContainer}>
 					<Button
 						onPress={() => {
-							alertHandler();
+							updateLyricsHandler(songId, title, lyric);
 							console.log("update action");
 						}}
 						title="Save"
@@ -67,7 +69,7 @@ const EditScreen = (props) => {
 				<TouchableOpacity style={styles.buttonContainer}>
 					<Button
 						onPress={() => {
-							alertHandler();
+							deleteLyricHandler(songId);
 							console.log("delete action");
 						}}
 						title="Delete"

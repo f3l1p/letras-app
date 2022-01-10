@@ -5,6 +5,8 @@ import {
 	deleteLyricDb,
 } from "../db";
 
+import { Alert } from "react-native";
+
 export const ADD_LYRIC = "ADD_LYRIC";
 export const DELETE_LYRIC = "DELETE_LYRIC";
 export const LOAD_LYRICS = "LOAD_LYRICS";
@@ -47,14 +49,16 @@ export const updateLyricAction = (id, title, lyric) => {
 				type: UPDATE_LYRICS,
 				payload: { id, title, lyric },
 			});
+			Alert.alert("OK", "La cancion se actualizo exitosamente");
 		} catch (err) {
+			console.log(err);
+			Alert.alert("Error", "no se pudo actualizar.");
 			throw err;
 		}
 	};
 };
 
 export function deletelyricAction(id) {
-	console.log(id, " action id for delete");
 	return async (dispatch) => {
 		try {
 			const result = await deleteLyricDb(id);
@@ -62,8 +66,10 @@ export function deletelyricAction(id) {
 				type: DELETE_LYRIC,
 				payload: id,
 			});
+			Alert.alert("OK", "La cancion se borro exitosamente");
 		} catch (err) {
 			console.log(err.message);
+			Alert.alert("Error", "No se pudo borrar.");
 		}
 	};
 }
@@ -71,8 +77,6 @@ export function deletelyricAction(id) {
 //Reducers
 
 const initialState = { lyrics: [] };
-
-console.log(initialState.lyrics, "initial state");
 
 function lyricsReducer(state = initialState.lyrics, action) {
 	console.log(state, "state");
@@ -92,11 +96,14 @@ function lyricsReducer(state = initialState.lyrics, action) {
 			};
 			break;
 		case DELETE_LYRIC:
-			const deleteNewArray = initialState.lyrics.filter((item) => {
-				item.id != action.payload.id;
-			});
+			const deleteNewArray = state.lyrics.filter(
+				(item) => item.id !== action.payload
+			);
 			console.log(deleteNewArray, "delete new array");
-			return deleteNewArray;
+			return {
+				...state,
+				lyrics: deleteNewArray,
+			};
 
 			break;
 
@@ -107,15 +114,20 @@ function lyricsReducer(state = initialState.lyrics, action) {
 			};
 			break;
 		case UPDATE_LYRICS:
-			return {
-				...state,
-				lyrics: [
-					...state.lyrics,
-					{
+			const updateLyrics = state.lyrics.map((lyric) => {
+				if (lyric.id === action.payload.id) {
+					return {
+						id: action.payload.id,
 						title: action.payload.title,
 						lyric: action.payload.lyric,
-					},
-				],
+					};
+				} else {
+					return lyric;
+				}
+			});
+			return {
+				...state,
+				lyrics: updateLyrics,
 			};
 		default:
 			return state;
